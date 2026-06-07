@@ -1,0 +1,38 @@
+name: Feature Request
+description: Suggest a new capability or improvement.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for improving trello-board-builder? Describe it below.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation or limitation that motivated this request.
+      placeholder: "There is no way to set a card position within a list, so all cards end up stacked in the order they appear in the JSON."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like it to work? Include any config or API details if you have them.
+      placeholder: "Add an optional `position` field to card objects in cards.json (e.g. top, bottom, or an integer index)."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you considered, and why you prefer this one.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Links, screenshots, Trello API docs, or anything else relevant.

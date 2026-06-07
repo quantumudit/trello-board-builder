@@ -1,0 +1,71 @@
+name: Bug Report
+description: Something is broken or behaving unexpectedly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+        Fill in as much detail as you can -- the more context, the faster it gets fixed.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: "When I run `just run`, the script creates duplicate lists even though they already exist."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What should have happened instead?
+      placeholder: "The script should detect existing lists and skip creation."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps to trigger the bug.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Config (settings.yaml)
+      description: Paste the relevant section of your `config/settings.yaml`. Remove any secrets.
+      render: yaml
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: Paste the terminal output or error traceback.
+      render: text
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version
+      placeholder: "3.12.3"
+
+  - type: input
+    id: uv_version
+    attributes:
+      label: uv version
+      placeholder: "0.5.0"
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: "Windows 11 / macOS 14 / Ubuntu 24.04"
