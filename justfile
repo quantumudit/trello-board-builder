@@ -16,6 +16,18 @@ run:
 run-config config:
     uv run python main.py --config {{config}}
 
+# Run all tests
+test:
+    uv run pytest
+
+# Run a specific test file: just test-file tests/test_config_loader.py
+test-file file:
+    uv run pytest {{file}}
+
+# Run only unit tests (skip integration and slow)
+test-unit:
+    uv run pytest -m "not integration and not slow"
+
 # Run linter
 lint:
     uv run ruff check .
