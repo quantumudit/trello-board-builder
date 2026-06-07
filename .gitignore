@@ -11,6 +11,7 @@ venv/
 dist/
 build/
 .ruff_cache/
+.pytest_cache/
 
 # Logs
 logs/
