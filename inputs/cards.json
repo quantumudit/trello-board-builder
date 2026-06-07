@@ -1,0 +1,98 @@
+[
+  {
+    "_comment": "Trello Builder - JSON Input",
+    "_rules": {
+      "list_name": "Must match a list name in config/settings.yaml -> lists",
+      "card_title": "Required. Shown on the Trello card.",
+      "description": "Optional. Supports \\n for line breaks.",
+      "labels": "Optional. Array of label names matching config/settings.yaml -> labels",
+      "due_date": "Optional. ISO 8601 e.g. 2025-06-13. Omit or null if not needed.",
+      "checklist": "Optional. Object with a 'title' and 'items' array. Omit if not needed."
+    }
+  },
+  {
+    "list_name": "Backlog",
+    "card_title": "Define project scope",
+    "description": "Outline goals, deliverables, and success criteria for the project.",
+    "labels": ["Low"],
+    "due_date": null,
+    "checklist": {
+      "title": "Tasks",
+      "items": [
+        "Identify stakeholders",
+        "Draft scope document",
+        "Get sign-off"
+      ]
+    }
+  },
+  {
+    "list_name": "Backlog",
+    "card_title": "Set up repository and tooling",
+    "description": "Initialise version control, CI pipeline, and local dev environment.",
+    "labels": ["Medium"],
+    "due_date": null,
+    "checklist": {
+      "title": "Tasks",
+      "items": [
+        "Create repository",
+        "Configure CI",
+        "Write setup instructions"
+      ]
+    }
+  },
+  {
+    "list_name": "To Do",
+    "card_title": "Write technical design document",
+    "description": "Document architecture decisions, data flow, and component boundaries.",
+    "labels": ["Medium"],
+    "due_date": "2025-07-01",
+    "checklist": {
+      "title": "Tasks",
+      "items": [
+        "Draft architecture diagram",
+        "Document API contracts",
+        "Review with team"
+      ]
+    }
+  },
+  {
+    "list_name": "To Do",
+    "card_title": "Implement core feature",
+    "description": "Build the primary feature as defined in the technical design document.",
+    "labels": ["High"],
+    "due_date": "2025-07-10",
+    "checklist": null
+  },
+  {
+    "list_name": "In Progress",
+    "card_title": "Fix critical bug in production",
+    "description": "Investigate and resolve the reported issue affecting live users.",
+    "labels": ["High"],
+    "due_date": "2025-06-20",
+    "checklist": {
+      "title": "Tasks",
+      "items": [
+        "Reproduce locally",
+        "Identify root cause",
+        "Deploy fix",
+        "Verify in production"
+      ]
+    }
+  },
+  {
+    "list_name": "In Review",
+    "card_title": "Code review: authentication module",
+    "description": "Review PR for the new authentication module before merging to main.",
+    "labels": ["Medium"],
+    "due_date": "2025-06-18",
+    "checklist": null
+  },
+  {
+    "list_name": "Done",
+    "card_title": "Project kickoff",
+    "description": "Completed initial project kickoff meeting with all stakeholders.",
+    "labels": ["Low"],
+    "due_date": null,
+    "checklist": null
+  }
+]

@@ -1,0 +1,29 @@
+trello:
+  api_base_url: "https://api.trello.com/1"
+  rate_limit_delay_seconds: 0.15
+
+board:
+  name: "My Board"
+  description: "Board description."
+  permission_level: "private"
+  create_if_not_exists: true
+  default_lists: false
+
+lists:
+  - "Backlog"
+  - "To Do"
+  - "In Progress"
+  - "In Review"
+  - "Done"
+
+labels:
+  - name: "Low"
+    color: "green"
+  - name: "Medium"
+    color: "yellow"
+  - name: "High"
+    color: "red"
+
+input:
+  format: "json"
+  file_path: "inputs/cards.json"
