@@ -12,8 +12,8 @@ from typing import Any
 import yaml
 from dotenv import load_dotenv
 
-from exceptions import AppException
-from logger import logger
+from shared.exceptions import AppException
+from shared.logger import logger
 
 
 class Config:

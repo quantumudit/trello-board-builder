@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING, Any
 
 import requests
 
-from exceptions import AppException
-from logger import logger
+from shared.exceptions import AppException
+from shared.logger import logger
 
 if TYPE_CHECKING:
     from utils.config_loader import Config

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from exceptions import AppException
+from shared.exceptions import AppException
 from utils.config_loader import Config
 
 _MINIMAL_YAML: dict = {

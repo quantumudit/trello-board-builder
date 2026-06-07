@@ -10,7 +10,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from exceptions import AppException
+from shared.exceptions import AppException
 from utils.input_loader import _normalise, load_cards
 
 

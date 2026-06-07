@@ -10,8 +10,8 @@ import sys
 from core.board_manager import BoardManager
 from core.card_builder import CardBuilder
 from core.trello_client import TrelloClient
-from exceptions import AppException
-from logger import logger
+from shared.exceptions import AppException
+from shared.logger import logger
 from utils.config_loader import Config
 from utils.input_loader import load_cards
 

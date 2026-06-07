@@ -1,25 +1,6 @@
 """
-exceptions.py
-
-Project-wide custom exception utilities built on top of loguru.
-
-Features:
-    - error_details(): one-line summary of file, function, line, and message
-    - format_traceback(): full formatted traceback as a plain string
-    - AppException: base exception with built-in .log() integration
-    - catch: re-exported loguru decorator / context manager for safe wrapping
-
-Typical usage:
-    from core.exceptions import AppException, catch
-
-    @catch
-    def risky_call():
-        ...
-
-    try:
-        risky_call()
-    except ValueError as exc:
-        raise AppException("validation failed", original=exc) from exc
+Project-wide exception utilities: AppException, error_details, and catch.
+All modules raise AppException and import catch from here.
 """
 
 import traceback

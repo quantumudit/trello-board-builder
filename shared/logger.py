@@ -1,16 +1,6 @@
 """
-logger.py
-
 Configures and provides a project-wide logger using loguru.
-
-Features:
-    - Colorful, formatted output to the console.
-    - Timestamped log file written to the 'logs/' directory.
-    - Single import: from core.logger import logger
-
-Typical usage:
-    from core.logger import logger
-    logger.info("Your log message here")
+Console output is colorized and timestamped; log files are written to logs/.
 """
 
 import sys
@@ -70,10 +60,10 @@ logger.patch(lambda record: record.update(time=record["time"].in_timezone(_TIMEZ
 logger.level("TRACE", color="<dim>", icon="-")
 logger.level("DEBUG", color="<blue>", icon="~")
 logger.level("INFO", color="<white>", icon="*")
-logger.level("SUCCESS", color="<bold><green>", icon="\u2714")  # heavy check
+logger.level("SUCCESS", color="<bold><green>", icon="✔")  # heavy check
 logger.level("WARNING", color="<bold><yellow>", icon="!")
-logger.level("ERROR", color="<bold><red>", icon="\u2717")  # light cross
-logger.level("CRITICAL", color="<bold><white><RED>", icon="\u2718")  # heavy cross
+logger.level("ERROR", color="<bold><red>", icon="✗")  # light cross
+logger.level("CRITICAL", color="<bold><white><RED>", icon="✘")  # heavy cross
 
 logger.add(
     sys.stdout,

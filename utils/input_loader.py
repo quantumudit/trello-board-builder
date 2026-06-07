@@ -8,8 +8,8 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from exceptions import AppException
-from logger import logger
+from shared.exceptions import AppException
+from shared.logger import logger
 
 if TYPE_CHECKING:
     from utils.config_loader import Config
