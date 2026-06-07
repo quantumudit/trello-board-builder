@@ -24,7 +24,11 @@ class Config:
         env_path: Path to the .env secrets file. Defaults to .env.
     """
 
-    def __init__(self, yaml_path: str = "config/settings.yaml", env_path: str = ".env") -> None:
+    def __init__(
+        self,
+        yaml_path: str = "config/settings.yaml",
+        env_path: str = ".env",
+    ) -> None:
         self._yaml_path = Path(yaml_path)
         self._env_path = Path(env_path)
         self._data: dict[str, Any] = {}
@@ -71,7 +75,9 @@ class Config:
     @property
     def api_base_url(self) -> str:
         """Return the Trello REST API base URL."""
-        return self._data.get("trello", {}).get("api_base_url", "https://api.trello.com/1")
+        return self._data.get("trello", {}).get(
+            "api_base_url", "https://api.trello.com/1"
+        )
 
     @property
     def rate_limit_delay(self) -> float:

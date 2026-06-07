@@ -40,7 +40,11 @@ def load_cards(config: Config) -> list[dict]:
     if not isinstance(raw, list):
         raise AppException("JSON input must be a top-level array of card objects.")
 
-    cards = [_normalise(item) for item in raw if "_comment" not in item and "_rules" not in item]
+    cards = [
+        _normalise(item)
+        for item in raw
+        if "_comment" not in item and "_rules" not in item
+    ]
 
     logger.success("Loaded {} cards", len(cards))
     return cards
