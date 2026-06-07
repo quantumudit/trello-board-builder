@@ -107,6 +107,16 @@ uv run python main.py --env .env.prod         # custom .env file
 
 ---
 
+## Testing
+
+```bash
+uv run pytest                                        # full suite
+uv run pytest tests/test_config_loader.py            # single file
+uv run pytest -m "not integration"                   # skip tests that call Trello
+```
+
+---
+
 ## Code Quality
 
 ```bash
