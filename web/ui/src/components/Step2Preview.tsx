@@ -47,8 +47,14 @@ export default function Step2Preview({
   // Label configuration and bank states
   const [boardLabelColors, setBoardLabelColors] = useState<Record<string, TrelloColor>>(labelColors);
   const [customLabels, setCustomLabels] = useState<string[]>([]);
+  const [hiddenDefaultLabels, setHiddenDefaultLabels] = useState<string[]>([]);
   const [newGlobalLabelName, setNewGlobalLabelName] = useState("");
   const [newGlobalLabelColor, setNewGlobalLabelColor] = useState<TrelloColor>("blue");
+
+  // Label bank inline edit state
+  const [editingLabelName, setEditingLabelName] = useState<string | null>(null);
+  const [editingLabelNewName, setEditingLabelNewName] = useState("");
+  const [editingLabelNewColor, setEditingLabelNewColor] = useState<TrelloColor>("blue");
 
   // Editor Modal state
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -103,11 +109,11 @@ export default function Step2Preview({
   // Extract all unique label names across all cards and custom labels
   const allLabels = useMemo(() => {
     const labels = new Set<string>();
-    defaultLabels.forEach(l => labels.add(l.name));
+    defaultLabels.filter(l => !hiddenDefaultLabels.includes(l.name)).forEach(l => labels.add(l.name));
     boardCards.forEach(c => c.labels.forEach(l => labels.add(l)));
     customLabels.forEach(lbl => labels.add(lbl));
     return Array.from(labels);
-  }, [defaultLabels, boardCards, customLabels]);
+  }, [defaultLabels, boardCards, customLabels, hiddenDefaultLabels]);
 
   // Rename a list safely
   const handleRenameList = (oldName: string, newName: string) => {
@@ -231,6 +237,39 @@ export default function Step2Preview({
     }));
     setNewGlobalLabelName("");
     showToast(`Created custom label "${name}"`, "success");
+  };
+
+  const handleSaveLabelEdit = () => {
+    if (!editingLabelName) return;
+    const newName = editingLabelNewName.trim();
+    if (!newName) return;
+
+    if (newName !== editingLabelName && allLabels.includes(newName)) {
+      showToast("Label name already exists", "error");
+      return;
+    }
+
+    if (newName !== editingLabelName) {
+      setBoardCards(prev => prev.map(card => ({
+        ...card,
+        labels: card.labels.map(l => l === editingLabelName ? newName : l),
+      })));
+      setCustomLabels(prev => prev.map(l => l === editingLabelName ? newName : l));
+      if (defaultLabels.some(l => l.name === editingLabelName)) {
+        setHiddenDefaultLabels(prev => [...prev, editingLabelName]);
+        setCustomLabels(prev => [...prev, newName]);
+      }
+    }
+
+    setBoardLabelColors(prev => {
+      const updated = { ...prev };
+      delete updated[editingLabelName];
+      updated[newName] = editingLabelNewColor;
+      return updated;
+    });
+
+    setEditingLabelName(null);
+    showToast(`Label updated to "${newName}"`, "success");
   };
 
   // Count active occurrences of a label on board cards
@@ -481,6 +520,8 @@ export default function Step2Preview({
       setBoardLabelColors({ ...labelColors });
     }
     setCustomLabels([]);
+    setHiddenDefaultLabels([]);
+    setEditingLabelName(null);
     setActiveMobileList(initialLists[0] || null);
     setDeletingCardIndex(null);
     setIsEditorOpen(false);
@@ -613,6 +654,7 @@ export default function Step2Preview({
             <span className="text-xs text-slate-400 italic">No labels created yet. Add one below!</span>
           ) : (
             allLabels.map((lbl) => {
+              const isEditing = editingLabelName === lbl;
               const color = getLabelColor(lbl);
               const pillStyles = getPillStyles(color);
               const count = getLabelCount(lbl);
@@ -620,16 +662,83 @@ export default function Step2Preview({
                 <div
                   key={lbl}
                   style={pillStyles}
-                  className="text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1.5 uppercase tracking-wide select-none shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:scale-105 transition duration-150"
-                  title={`${count} cards have the label "${lbl}"`}
+                  className={`text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1.5 uppercase tracking-wide select-none shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] transition duration-150 group/lbl ${isEditing ? "ring-2 ring-white/60 scale-105" : "hover:scale-105"}`}
+                  title={`${count} cards -- click pencil to edit`}
                 >
                   <span>{lbl} ({count})</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingLabelName(lbl);
+                      setEditingLabelNewName(lbl);
+                      setEditingLabelNewColor(getLabelColor(lbl));
+                    }}
+                    className="w-3.5 h-3.5 rounded-full bg-white/20 hover:bg-white/50 flex items-center justify-center transition opacity-0 group-hover/lbl:opacity-100 shrink-0 cursor-pointer"
+                    title={`Edit label "${lbl}"`}
+                    aria-label={`Edit label ${lbl}`}
+                  >
+                    <Pencil className="w-2 h-2" />
+                  </button>
                 </div>
               );
             })
           )}
         </div>
+
+        {/* Inline Label Edit Form */}
+        {editingLabelName && (
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 bg-sky-50 p-4 rounded-lg border border-sky-200">
+            <div className="flex-grow">
+              <input
+                type="text"
+                autoFocus
+                value={editingLabelNewName}
+                onChange={(e) => setEditingLabelNewName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") { e.preventDefault(); handleSaveLabelEdit(); }
+                  else if (e.key === "Escape") setEditingLabelName(null);
+                }}
+                className="w-full px-3 py-1.5 text-xs bg-white border border-sky-300 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 font-medium"
+                placeholder="Label name..."
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 shrink-0">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider shrink-0">Color:</span>
+              <div className="flex flex-wrap items-center gap-1.5 bg-white p-1.5 border border-slate-200 rounded-md shadow-xs select-none">
+                {(Object.keys(TRELLO_COLORS) as TrelloColor[]).map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => setEditingLabelNewColor(color)}
+                    style={{ backgroundColor: TRELLO_COLORS[color] }}
+                    className={`w-5 h-5 rounded-full cursor-pointer transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-sky-500 ${
+                      editingLabelNewColor === color
+                        ? "ring-2 ring-offset-1 ring-slate-800 scale-120 shadow-md z-10"
+                        : "opacity-75 hover:opacity-100 hover:scale-[1.15]"
+                    }`}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleSaveLabelEdit}
+                className="px-4 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-md text-xs font-bold transition h-8 flex items-center justify-center cursor-pointer shadow-xs"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditingLabelName(null)}
+                className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded-md text-xs font-semibold transition h-8 flex items-center justify-center cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Inline Create Form */}
         <form onSubmit={handleGlobalLabelSubmit} className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 bg-slate-50 p-4 rounded-lg border border-slate-150">
