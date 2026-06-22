@@ -90,9 +90,7 @@ def _run(run_config: RunConfig, job_id: str) -> None:
     def _queue_sink(message: Any) -> None:
         log_q.put(str(message).rstrip())
 
-    sink_id = logger.add(
-        _queue_sink, format="{time:HH:mm:ss} | {level:<7} | {message}"
-    )
+    sink_id = logger.add(_queue_sink, format="{time:HH:mm:ss} | {level:<7} | {message}")
 
     try:
         config = _WebConfig(run_config)
@@ -175,8 +173,7 @@ class _WebConfig(Config):
     def labels(self) -> list[dict[str, str]]:
         """Return the label overrides from the run config as config-compatible dicts."""
         return [
-            {"name": lbl.name, "color": lbl.color}
-            for lbl in self._run_config.labels
+            {"name": lbl.name, "color": lbl.color} for lbl in self._run_config.labels
         ]
 
     @property

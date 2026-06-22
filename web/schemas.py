@@ -9,8 +9,16 @@ from typing import Any
 from pydantic import BaseModel, field_validator
 
 _VALID_TRELLO_COLORS = {
-    "green", "yellow", "orange", "red", "purple",
-    "blue", "sky", "lime", "pink", "black",
+    "green",
+    "yellow",
+    "orange",
+    "red",
+    "purple",
+    "blue",
+    "sky",
+    "lime",
+    "pink",
+    "black",
 }
 
 _VALID_PERMISSIONS = {"private", "org", "public"}

@@ -130,7 +130,8 @@ async def validate_json(file: UploadFile = File(...)) -> ValidateResponse:
         )
 
     cards = [
-        c for c in raw
+        c
+        for c in raw
         if isinstance(c, dict) and "_comment" not in c and "_rules" not in c
     ]
 

@@ -37,5 +37,5 @@ docs/integration-plan.md
 web/ui/node_modules/
 web/ui/dist/
 web/ui/.vite/
-web/static/assets/
+web/static/
 web/templates/index.html
