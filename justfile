@@ -38,3 +38,7 @@ format:
 
 # Run linter and formatter
 check: lint format
+
+# Start the FastAPI web server (hot-reload, dev mode)
+serve:
+    uv run uvicorn web.app:app --reload --host 0.0.0.0 --port 8000

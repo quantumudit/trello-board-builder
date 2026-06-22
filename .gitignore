@@ -28,3 +28,7 @@ Thumbs.db
 # Claude
 CLAUDE.md
 .claude/
+
+temp_frontend/
+docs/frontend-spec.md
+docs/integration-plan.md
