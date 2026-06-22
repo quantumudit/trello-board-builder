@@ -69,7 +69,7 @@ async def index(request: Request) -> HTMLResponse | PlainTextResponse:
         return PlainTextResponse(
             "Frontend not built. Run `just build-ui` first.", status_code=200
         )
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html")
 
 
 # ---------------------------------------------------------------------------
