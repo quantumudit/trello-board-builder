@@ -87,6 +87,7 @@ export default function Step2Preview({
 
   // Custom label addition in modal
   const [newCustomLabel, setNewCustomLabel] = useState("");
+  const [newCustomLabelColor, setNewCustomLabelColor] = useState<TrelloColor>("blue");
 
   // Deletion confirm state
   const [deletingCardIndex, setDeletingCardIndex] = useState<number | null>(null);
@@ -278,6 +279,7 @@ export default function Step2Preview({
     });
     setNewChecklistItem("");
     setNewCustomLabel("");
+    setNewCustomLabelColor("blue");
     setIsEditorOpen(true);
   };
 
@@ -296,6 +298,7 @@ export default function Step2Preview({
     });
     setNewChecklistItem("");
     setNewCustomLabel("");
+    setNewCustomLabelColor("blue");
     setIsEditorOpen(true);
   };
 
@@ -463,11 +466,9 @@ export default function Step2Preview({
       showToast("Label already exists", "info");
       return;
     }
-    // Automatically select the newly created label
-    setModalFields(prev => ({
-      ...prev,
-      labels: [...prev.labels, label]
-    }));
+    setCustomLabels(prev => [...prev, label]);
+    setBoardLabelColors(prev => ({ ...prev, [label]: newCustomLabelColor }));
+    setModalFields(prev => ({ ...prev, labels: [...prev.labels, label] }));
     setNewCustomLabel("");
   };
 
@@ -1392,21 +1393,40 @@ export default function Step2Preview({
                 </div>
 
                 {/* Custom label addition input */}
-                <div className="flex gap-2 pt-1">
-                  <input
-                    type="text"
-                    placeholder="New custom label name..."
-                    value={newCustomLabel}
-                    onChange={(e) => setNewCustomLabel(e.target.value)}
-                    className="flex-1 px-2.5 py-1.5 text-xs border border-slate-300 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={addCustomLabel}
-                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-bold rounded-md transition"
-                  >
-                    Add Label
-                  </button>
+                <div className="flex flex-col gap-1.5 pt-1">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Some Label"
+                      value={newCustomLabel}
+                      onChange={(e) => setNewCustomLabel(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomLabel(); } }}
+                      className="flex-1 px-2.5 py-1.5 text-xs border border-slate-300 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={addCustomLabel}
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 text-xs font-bold rounded-md transition shrink-0"
+                    >
+                      Add Label
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap px-0.5">
+                    {(Object.keys(TRELLO_COLORS) as TrelloColor[]).map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => setNewCustomLabelColor(color)}
+                        style={{ backgroundColor: TRELLO_COLORS[color] }}
+                        className={`w-4 h-4 rounded-full cursor-pointer transition-all focus:outline-none ${
+                          newCustomLabelColor === color
+                            ? "ring-2 ring-offset-1 ring-slate-700 scale-110"
+                            : "opacity-70 hover:opacity-100 hover:scale-110"
+                        }`}
+                        title={color}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
 
