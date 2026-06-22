@@ -256,6 +256,16 @@ export default function Step2Preview({
     }
   };
 
+  const toggleCollapseListCards = (listCards: Card[]) => {
+    const idxs = listCards.map(c => boardCards.indexOf(c));
+    const allCollapsed = idxs.length > 0 && idxs.every(i => collapsedCards[i]);
+    setCollapsedCards(prev => {
+      const next = { ...prev };
+      idxs.forEach(i => { next[i] = !allCollapsed; });
+      return next;
+    });
+  };
+
   // Create a global custom label bank entry
   const handleGlobalLabelSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -953,18 +963,23 @@ export default function Step2Preview({
                   <span className="bg-slate-250 text-slate-600 text-[10px] font-extrabold rounded-full px-2 py-0.5 font-sans">
                     {listCards.length}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => toggleCollapseList(list)}
-                    className="p-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer"
-                    title={collapsedLists[list] ? `Expand ${list}` : `Collapse ${list}`}
-                    aria-label={collapsedLists[list] ? "Expand list" : "Collapse list"}
-                  >
-                    {collapsedLists[list]
-                      ? <ChevronDown className="w-3.5 h-3.5" />
-                      : <ChevronUp className="w-3.5 h-3.5" />
-                    }
-                  </button>
+                  {(() => {
+                    const allCardsInListCollapsed = listCards.length > 0 && listCards.every(c => collapsedCards[boardCards.indexOf(c)]);
+                    return (
+                      <button
+                        type="button"
+                        onClick={() => toggleCollapseListCards(listCards)}
+                        className="p-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer"
+                        title={allCardsInListCollapsed ? `Expand all cards in ${list}` : `Collapse all cards in ${list}`}
+                        aria-label={allCardsInListCollapsed ? "Expand all cards in list" : "Collapse all cards in list"}
+                      >
+                        {allCardsInListCollapsed
+                          ? <ChevronDown className="w-3.5 h-3.5" />
+                          : <ChevronUp className="w-3.5 h-3.5" />
+                        }
+                      </button>
+                    );
+                  })()}
                 </div>
               </div>
 
