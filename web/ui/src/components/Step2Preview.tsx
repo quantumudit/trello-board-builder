@@ -705,7 +705,7 @@ export default function Step2Preview({
                       setEditingLabelNewName(lbl);
                       setEditingLabelNewColor(getLabelColor(lbl));
                     }}
-                    className="w-3.5 h-3.5 rounded-full bg-white/20 hover:bg-white/50 flex items-center justify-center transition opacity-0 group-hover/lbl:opacity-100 shrink-0 cursor-pointer"
+                    className="w-3.5 h-3.5 rounded-full bg-white/20 hover:bg-white/50 flex items-center justify-center transition shrink-0 cursor-pointer"
                     title={`Edit label "${lbl}"`}
                     aria-label={`Edit label ${lbl}`}
                   >
