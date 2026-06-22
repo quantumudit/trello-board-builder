@@ -739,6 +739,7 @@ export default function Step2Preview({
                   title={`${count} cards -- click pencil to edit`}
                 >
                   <span>{lbl} ({count})</span>
+                  <span className="w-px h-3 bg-white/30 shrink-0" />
                   <button
                     type="button"
                     onClick={() => {
@@ -746,11 +747,11 @@ export default function Step2Preview({
                       setEditingLabelNewName(lbl);
                       setEditingLabelNewColor(getLabelColor(lbl));
                     }}
-                    className="w-3.5 h-3.5 rounded-full bg-white/20 hover:bg-white/50 flex items-center justify-center transition shrink-0 cursor-pointer"
+                    className="p-0 hover:opacity-70 transition shrink-0 cursor-pointer"
                     title={`Edit label "${lbl}"`}
                     aria-label={`Edit label ${lbl}`}
                   >
-                    <Pencil className="w-2 h-2" />
+                    <Pencil className="w-2.5 h-2.5" />
                   </button>
                 </div>
               );
