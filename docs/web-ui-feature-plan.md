@@ -1,5 +1,8 @@
 # Web UI Feature Plan
 
+> **Status: IMPLEMENTED** -- see `web/` (Python backend) and `web/ui/` (React frontend).
+> This document is preserved as a design reference. The actual code is the source of truth.
+
 This document is a complete, self-contained implementation guide.
 It contains every decision, code skeleton, and command needed to build the feature
 from scratch on a fresh feature branch. No prior context required.
