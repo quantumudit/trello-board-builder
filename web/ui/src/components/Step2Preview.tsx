@@ -36,6 +36,7 @@ export default function Step2Preview({
   const [boardLists, setBoardLists] = useState<string[]>(initialLists);
   const [activeMobileList, setActiveMobileList] = useState<string | null>(initialLists[0] || null);
   const [collapsedLists, setCollapsedLists] = useState<Record<string, boolean>>({});
+  const [collapsedCards, setCollapsedCards] = useState<Record<number, boolean>>({});
 
   // Add list state
   const [isAddingList, setIsAddingList] = useState(false);
@@ -235,6 +236,23 @@ export default function Step2Preview({
       setCollapsedLists({});
     } else {
       setCollapsedLists(Object.fromEntries(boardLists.map(l => [l, true])));
+    }
+  };
+
+  const allCardsCollapsed = useMemo(
+    () => boardCards.length > 0 && boardCards.every((_, i) => collapsedCards[i]),
+    [boardCards, collapsedCards]
+  );
+
+  const toggleCollapseCard = (idx: number) => {
+    setCollapsedCards(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const handleCollapseAllCards = () => {
+    if (allCardsCollapsed) {
+      setCollapsedCards({});
+    } else {
+      setCollapsedCards(Object.fromEntries(boardCards.map((_, i) => [i, true])));
     }
   };
 
@@ -542,6 +560,7 @@ export default function Step2Preview({
     setHiddenDefaultLabels([]);
     setEditingLabelName(null);
     setCollapsedLists({});
+    setCollapsedCards({});
     setActiveMobileList(initialLists[0] || null);
     setDeletingCardIndex(null);
     setIsEditorOpen(false);
@@ -604,13 +623,25 @@ export default function Step2Preview({
         <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
           <button
             type="button"
+            onClick={handleCollapseAllCards}
+            className="hidden md:flex items-center gap-1.5 text-xs font-bold transition-all px-2.5 py-1.5 rounded-lg border shadow-sm text-slate-600 bg-white hover:bg-slate-100 border-slate-200 hover:border-slate-300 active:scale-95 cursor-pointer"
+            title={allCardsCollapsed ? "Expand all cards to full view" : "Collapse all cards to title-only view"}
+          >
+            {allCardsCollapsed
+              ? <><ChevronDown className="w-3.5 h-3.5" /><span>Expand Cards</span></>
+              : <><ChevronUp className="w-3.5 h-3.5" /><span>Collapse Cards</span></>
+            }
+          </button>
+
+          <button
+            type="button"
             onClick={handleCollapseAll}
             className="hidden md:flex items-center gap-1.5 text-xs font-bold transition-all px-2.5 py-1.5 rounded-lg border shadow-sm text-slate-600 bg-white hover:bg-slate-100 border-slate-200 hover:border-slate-300 active:scale-95 cursor-pointer"
             title={allListsCollapsed ? "Expand all lists to full view" : "Collapse all lists to header-only view"}
           >
             {allListsCollapsed
-              ? <><ChevronDown className="w-3.5 h-3.5" /><span>Expand All</span></>
-              : <><ChevronUp className="w-3.5 h-3.5" /><span>Collapse All</span></>
+              ? <><ChevronDown className="w-3.5 h-3.5" /><span>Expand Lists</span></>
+              : <><ChevronUp className="w-3.5 h-3.5" /><span>Collapse Lists</span></>
             }
           </button>
 
@@ -946,7 +977,8 @@ export default function Step2Preview({
                 ) : (
                   listCards.map((card) => {
                     const originalIdx = boardCards.indexOf(card);
-                    
+                    const isCardCollapsed = collapsedCards[originalIdx] ?? false;
+
                     // Count checklist items completed
                     const checklistTotal = card.checklist?.items?.length || 0;
                     const isDeletingThis = deletingCardIndex === originalIdx;
@@ -1015,11 +1047,27 @@ export default function Step2Preview({
                             </button>
                           </div>
 
-                          {/* Card Content Title with left handle padding spacer */}
-                          <p className="font-bold text-xs text-slate-900 leading-snug pl-4 pr-12">
-                            {card.card_title}
-                          </p>
+                          {/* Card Content Title row with per-card collapse toggle */}
+                          <div className="flex items-start gap-1 pl-4 pr-8">
+                            <p className="font-bold text-xs text-slate-900 leading-snug flex-1">
+                              {card.card_title}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); toggleCollapseCard(originalIdx); }}
+                              className="shrink-0 p-0.5 rounded text-slate-350 hover:text-slate-600 hover:bg-slate-100 transition cursor-pointer mt-0.5"
+                              title={isCardCollapsed ? "Expand card" : "Collapse card"}
+                              aria-label={isCardCollapsed ? "Expand card" : "Collapse card"}
+                            >
+                              {isCardCollapsed
+                                ? <ChevronDown className="w-3 h-3" />
+                                : <ChevronUp className="w-3 h-3" />
+                              }
+                            </button>
+                          </div>
 
+                          {/* Collapsible card body: description, labels, badges */}
+                          {!isCardCollapsed && <>
                           {/* Description Preview (if exists) */}
                           {card.description && (
                             <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed pl-4">
@@ -1081,6 +1129,7 @@ export default function Step2Preview({
                               </span>
                             )}
                           </div>
+                          </>}
 
                           {/* Delete Popover confirmation */}
                           {isDeletingThis && (
