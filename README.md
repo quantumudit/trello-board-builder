@@ -107,6 +107,40 @@ uv run python main.py --env .env.prod         # custom .env file
 
 ---
 
+## Web UI
+
+A browser-based wizard for building boards without touching the CLI.
+
+### Development mode (two terminals)
+
+```bash
+# Terminal 1 -- FastAPI backend with hot reload
+just serve
+
+# Terminal 2 -- Vite dev server (proxies /api to :8000)
+cd web/ui && npm run dev
+```
+
+Open http://localhost:5173. The UI proxies all `/api` calls to the FastAPI server.
+
+### Production mode (single server)
+
+```bash
+just build-ui   # compile React -> web/static/ and web/templates/
+just serve      # serve everything from http://localhost:8000
+```
+
+### Docker
+
+```bash
+just build-ui                # build React frontend first (no Node.js in image)
+docker compose up --build    # build image and start container
+```
+
+Open http://localhost:8000. Credentials are read from the host `.env` via docker-compose.
+
+---
+
 ## Testing
 
 ```bash

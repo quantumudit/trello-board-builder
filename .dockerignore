@@ -1,0 +1,12 @@
+web/ui/node_modules/
+web/ui/.vite/
+.git/
+.venv/
+.env
+logs/
+__pycache__/
+*.pyc
+*.pyo
+.ruff_cache/
+.pytest_cache/
+temp_frontend/
