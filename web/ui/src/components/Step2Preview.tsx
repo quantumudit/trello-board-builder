@@ -213,11 +213,12 @@ export default function Step2Preview({
       if (boardLabelColors[key] !== labelColors[key]) return true;
     }
 
-    // Check custom labels
+    // Check custom labels and hidden (renamed) default labels
     if (customLabels.length > 0) return true;
+    if (hiddenDefaultLabels.length > 0) return true;
 
     return false;
-  }, [boardCards, boardLists, boardLabelColors, customLabels, cards, initialLists, labelColors]);
+  }, [boardCards, boardLists, boardLabelColors, customLabels, hiddenDefaultLabels, cards, initialLists, labelColors]);
 
   // Create a global custom label bank entry
   const handleGlobalLabelSubmit = (e: React.FormEvent) => {
@@ -225,7 +226,7 @@ export default function Step2Preview({
     const name = newGlobalLabelName.trim();
     if (!name) return;
 
-    if (allLabels.includes(name)) {
+    if (customLabels.includes(name)) {
       showToast("Label already exists in bank", "info");
       return;
     }
@@ -501,7 +502,7 @@ export default function Step2Preview({
   const addCustomLabel = () => {
     const label = newCustomLabel.trim();
     if (!label) return;
-    if (allLabels.includes(label)) {
+    if (customLabels.includes(label)) {
       showToast("Label already exists", "info");
       return;
     }
