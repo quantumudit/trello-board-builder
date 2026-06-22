@@ -35,6 +35,7 @@ export default function Step2Preview({
   const [boardCards, setBoardCards] = useState<Card[]>(cards);
   const [boardLists, setBoardLists] = useState<string[]>(initialLists);
   const [activeMobileList, setActiveMobileList] = useState<string | null>(initialLists[0] || null);
+  const [collapsedLists, setCollapsedLists] = useState<Record<string, boolean>>({});
 
   // Add list state
   const [isAddingList, setIsAddingList] = useState(false);
@@ -219,6 +220,23 @@ export default function Step2Preview({
 
     return false;
   }, [boardCards, boardLists, boardLabelColors, customLabels, hiddenDefaultLabels, cards, initialLists, labelColors]);
+
+  const allListsCollapsed = useMemo(
+    () => boardLists.length > 0 && boardLists.every(l => collapsedLists[l]),
+    [boardLists, collapsedLists]
+  );
+
+  const toggleCollapseList = (list: string) => {
+    setCollapsedLists(prev => ({ ...prev, [list]: !prev[list] }));
+  };
+
+  const handleCollapseAll = () => {
+    if (allListsCollapsed) {
+      setCollapsedLists({});
+    } else {
+      setCollapsedLists(Object.fromEntries(boardLists.map(l => [l, true])));
+    }
+  };
 
   // Create a global custom label bank entry
   const handleGlobalLabelSubmit = (e: React.FormEvent) => {
@@ -523,6 +541,7 @@ export default function Step2Preview({
     setCustomLabels([]);
     setHiddenDefaultLabels([]);
     setEditingLabelName(null);
+    setCollapsedLists({});
     setActiveMobileList(initialLists[0] || null);
     setDeletingCardIndex(null);
     setIsEditorOpen(false);
@@ -583,6 +602,18 @@ export default function Step2Preview({
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+          <button
+            type="button"
+            onClick={handleCollapseAll}
+            className="hidden md:flex items-center gap-1.5 text-xs font-bold transition-all px-2.5 py-1.5 rounded-lg border shadow-sm text-slate-600 bg-white hover:bg-slate-100 border-slate-200 hover:border-slate-300 active:scale-95 cursor-pointer"
+            title={allListsCollapsed ? "Expand all lists to full view" : "Collapse all lists to header-only view"}
+          >
+            {allListsCollapsed
+              ? <><ChevronDown className="w-3.5 h-3.5" /><span>Expand All</span></>
+              : <><ChevronUp className="w-3.5 h-3.5" /><span>Collapse All</span></>
+            }
+          </button>
+
           <button
             type="button"
             disabled={!isBoardChanged}
@@ -816,9 +847,10 @@ export default function Step2Preview({
                 setDragOverList(null);
                 handleDropOnList(e, list);
               }}
-              className={`w-72 bg-slate-100 rounded-xl flex flex-col max-h-[500px] border shrink-0 transition-colors duration-150
-                ${isDragOverThis 
-                  ? "border-sky-500 bg-sky-50/70 ring-2 ring-sky-200" 
+              className={`w-72 bg-slate-100 rounded-xl flex flex-col border shrink-0 transition-colors duration-150
+                ${!collapsedLists[list] ? "max-h-[500px]" : ""}
+                ${isDragOverThis
+                  ? "border-sky-500 bg-sky-50/70 ring-2 ring-sky-200"
                   : "border-slate-200/60 shadow-sm"
                 }
               `}
@@ -886,13 +918,27 @@ export default function Step2Preview({
                     </div>
                   </div>
                 )}
-                <span className="bg-slate-250 text-slate-600 text-[10px] font-extrabold rounded-full px-2 py-0.5 font-sans">
-                  {listCards.length}
-                </span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="bg-slate-250 text-slate-600 text-[10px] font-extrabold rounded-full px-2 py-0.5 font-sans">
+                    {listCards.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => toggleCollapseList(list)}
+                    className="p-0.5 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer"
+                    title={collapsedLists[list] ? `Expand ${list}` : `Collapse ${list}`}
+                    aria-label={collapsedLists[list] ? "Expand list" : "Collapse list"}
+                  >
+                    {collapsedLists[list]
+                      ? <ChevronDown className="w-3.5 h-3.5" />
+                      : <ChevronUp className="w-3.5 h-3.5" />
+                    }
+                  </button>
+                </div>
               </div>
 
-              {/* Stacked Cards Area */}
-              <div className="p-3 overflow-y-auto space-y-3 flex-1 scrollbar-thin">
+              {/* Stacked Cards Area + Add Card (hidden when collapsed) */}
+              {!collapsedLists[list] && <div className="p-3 overflow-y-auto space-y-3 flex-1 scrollbar-thin">
                 {listCards.length === 0 ? (
                   <div className="text-center py-8 text-xs text-slate-400 font-medium italic border-2 border-dashed border-slate-200 rounded-lg">
                     Empty list column
@@ -1073,19 +1119,21 @@ export default function Step2Preview({
                     );
                   })
                 )}
-              </div>
+              </div>}
 
-              {/* Bottom add card bar */}
-              <div className="p-2 border-t border-slate-200/50 bg-slate-50 rounded-b-xl">
-                <button
-                  type="button"
-                  onClick={() => openNewCardModal(list)}
-                  className="w-full py-1.5 hover:bg-slate-200/70 text-slate-600 hover:text-slate-800 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Card</span>
-                </button>
-              </div>
+              {/* Bottom add card bar (hidden when collapsed) */}
+              {!collapsedLists[list] && (
+                <div className="p-2 border-t border-slate-200/50 bg-slate-50 rounded-b-xl">
+                  <button
+                    type="button"
+                    onClick={() => openNewCardModal(list)}
+                    className="w-full py-1.5 hover:bg-slate-200/70 text-slate-600 hover:text-slate-800 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Card</span>
+                  </button>
+                </div>
+              )}
             </div>
           );
         })}
