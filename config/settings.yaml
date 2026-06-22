@@ -23,6 +23,10 @@ labels:
     color: "yellow"
   - name: "High"
     color: "red"
+  - name: "Easy"
+    color: "green"
+  - name: "Hard"
+    color: "red"
 
 input:
   format: "json"
