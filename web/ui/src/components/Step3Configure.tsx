@@ -4,12 +4,11 @@
  */
 
 import React, { useState } from "react";
-import { 
-  ChevronLeft, Key, Lock, Eye, EyeOff, Clipboard, Palette, Settings2, 
-  Info, Sparkles, Undo2, RefreshCw, FolderOpen, Layers, CheckCircle2 
+import {
+  ChevronLeft, Key, Lock, Eye, EyeOff, Clipboard, Settings2,
+  Info, Sparkles, Undo2, RefreshCw, FolderOpen, Layers, CheckCircle2
 } from "lucide-react";
 import type { TrelloColor, Card } from "../types";
-import { TRELLO_COLORS } from "../utils/colors";
 
 interface Step3ConfigureProps {
   cardsCount: number;
@@ -76,29 +75,9 @@ export default function Step3Configure({
   const [isGeneratingDetails, setIsGeneratingDetails] = useState(false);
   const [isRefactoringDesc, setIsRefactoringDesc] = useState(false);
 
-  // Map label name -> current chosen color
-  const [labelColors, setLabelColors] = useState<Record<string, TrelloColor>>(() => {
-    const initial: Record<string, TrelloColor> = {};
-    labelNames.forEach(name => {
-      initial[name] = initialLabelColors[name] || "blue";
-    });
-    return initial;
-  });
-
   // Password visibility triggers
   const [showApiKey, setShowApiKey] = useState(false);
   const [showToken, setShowToken] = useState(false);
-
-  const colorsList: TrelloColor[] = [
-    "green", "yellow", "orange", "red", "purple", "blue", "sky", "lime", "pink", "black"
-  ];
-
-  const handleColorSelect = (labelName: string, color: TrelloColor) => {
-    setLabelColors(prev => ({
-      ...prev,
-      [labelName]: color
-    }));
-  };
 
   // Load Trello credentials from server-side .env configuration
   const handleLoadFromEnvChange = async (checked: boolean) => {
@@ -335,7 +314,7 @@ export default function Step3Configure({
       createIfNotExists: configType === "new", // "Create board if missing" checkbox is removed for new board; setting appropriately
       apiKey: trimmedKey,
       token: trimmedToken,
-      labelColors
+      labelColors: initialLabelColors
     });
   };
 
@@ -359,69 +338,10 @@ export default function Step3Configure({
 
       <form onSubmit={handleBuildSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Columns (Color labels and Settings) */}
+        {/* Left Columns (Settings) */}
         <div className="lg:col-span-2 space-y-6">
-          
-          {/* 10.1 Label colors card */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5" id="label-colors-picker">
-            <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-              <Palette className="w-5 h-5 text-sky-600 animate-pulse-subtle" />
-              <div>
-                <h3 className="text-base font-bold text-slate-900">Map Label Colors</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Assign any of Trello&apos;s 10 official colors to your card labels</p>
-              </div>
-            </div>
 
-            {labelNames.length === 0 ? (
-              <p className="text-xs text-slate-500 italic">No labels detected; they will be generated implicitly if specified on future cards.</p>
-            ) : (
-              <div className="space-y-4">
-                {labelNames.map((name) => {
-                  const activeColor = labelColors[name] || "blue";
-
-                  return (
-                    <div 
-                      key={name} 
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-50 border border-slate-150 rounded-lg hover:border-slate-300 transition"
-                      aria-label={`Color mapping row for ${name}`}
-                    >
-                      <span className="text-xs font-bold text-slate-850 min-w-[120px] truncate uppercase tracking-wider" title={name}>
-                        {name}
-                      </span>
-
-                      {/* Swatches Selector */}
-                      <div className="flex flex-wrap gap-2">
-                        {colorsList.map((color) => {
-                          const hex = TRELLO_COLORS[color];
-                          const isSelected = activeColor === color;
-
-                          return (
-                            <button
-                              key={color}
-                              type="button"
-                              onClick={() => handleColorSelect(name, color)}
-                              style={{ backgroundColor: hex }}
-                              className={`
-                                w-7 h-7 rounded-full cursor-pointer transition focus:outline-none
-                                ${isSelected 
-                                  ? "ring-2 ring-offset-2 ring-slate-800 scale-110 shadow-md" 
-                                  : "opacity-80 hover:opacity-100 hover:scale-105"
-                                }
-                              `}
-                              title={`Assign ${color} to label ${name}`}
-                              aria-label={`Select ${color} color`}
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* 10.2 Board Settings card with New / Existing Mode toggle */}
+          {/* Board Settings card with New / Existing Mode toggle */}
           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-5" id="board-general-settings">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
