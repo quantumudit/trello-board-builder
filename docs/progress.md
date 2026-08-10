@@ -75,16 +75,16 @@ trello-board-builder/
 
 ## The 10-Task Checklist
 
-- [ ] Task 1: Move `web/ui/` -> `frontend/`, update Vite `outDir`
-- [ ] Task 2: Create `backend/` package, move `web/app.py`, `schemas.py`, `pipeline_runner.py`, `templates/`
-- [ ] Task 3: Move `core/` -> `backend/services/`, update all imports from `core.` to `backend.services.`
-- [ ] Task 4: Move `utils/` -> `backend/utils/`, add `pydantic-settings`, create `backend/utils/settings.py`
-- [ ] Task 5: Keep `shared/` at root -- no changes needed
-- [ ] Task 6: Create `agents/` package, move `web/gemini_service.py` -> `agents/ai_service.py`, rename class, add `agents/settings.py`, add `agents/README.md`
-- [ ] Task 7: Update `main.py` imports (`utils.` -> `backend.utils.`, `core.` -> `backend.services.`)
-- [ ] Task 8: Update `tests/` imports (`utils.` -> `backend.utils.`)
-- [ ] Task 9: Add per-package README files (`backend/README.md`, `frontend/README.md`)
-- [ ] Task 10: Update `CLAUDE.md`, `README.md`, `justfile`, `Dockerfile`, `docker-compose.yaml`, `.gitignore`, `docs/`
+- [x] Task 1: Move `web/ui/` -> `frontend/`, update Vite `outDir`
+- [x] Task 2: Create `backend/` package, move `web/app.py`, `schemas.py`, `pipeline_runner.py`, `templates/`
+- [x] Task 3: Move `core/` -> `backend/services/`, update all imports from `core.` to `backend.services.`
+- [x] Task 4: Move `utils/` -> `backend/utils/`, add `pydantic-settings`, create `backend/utils/settings.py`
+- [x] Task 5: Keep `shared/` at root -- no changes needed
+- [x] Task 6: Create `agents/` package, move `web/gemini_service.py` -> `agents/ai_service.py`, rename class, add `agents/settings.py`, add `agents/README.md`
+- [x] Task 7: Update `main.py` imports (folded into Tasks 3 and 4)
+- [x] Task 8: Update `tests/` imports (folded into Task 4)
+- [x] Task 9: Add per-package README files (`backend/README.md`, `frontend/README.md`)
+- [x] Task 10: Update `CLAUDE.md`, `README.md`, `justfile`, `Dockerfile`, `docker-compose.yaml`, `.gitignore`, `docs/`
 
 ### Things to watch on Task 10
 
