@@ -9,8 +9,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+from backend.utils.config_loader import Config
 from shared.exceptions import AppException
-from utils.config_loader import Config
 
 _MINIMAL_YAML: dict = {
     "board": {"name": "Test Board"},

@@ -41,9 +41,9 @@ check: lint format
 
 # Start the FastAPI web server (hot-reload, dev mode)
 serve:
-    uv run uvicorn web.app:app --reload --host 0.0.0.0 --port 8000
+    uv run uvicorn backend.app:app --reload --host 0.0.0.0 --port 8000
 
 # Build the React frontend and wire output into FastAPI static/templates paths
 build-ui:
-    cd web/ui && npm install && npm run build
-    Move-Item -Force -Path "web/static/index.html" -Destination "web/templates/index.html"
+    cd frontend && npm install && npm run build
+    Move-Item -Force -Path "backend/static/index.html" -Destination "backend/templates/index.html"

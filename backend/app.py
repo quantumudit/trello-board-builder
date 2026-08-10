@@ -19,20 +19,20 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 
-from shared.exceptions import AppException
-from shared.logger import logger
-from web.gemini_service import GeminiService
-from web.pipeline_runner import get_job_queue, get_job_result, start_pipeline
-from web.schemas import (
+from agents.ai_service import AIService
+from backend.pipeline_runner import get_job_queue, get_job_result, start_pipeline
+from backend.schemas import (
+    AIBoardRequest,
+    AIBoardResponse,
+    AIRefactorRequest,
+    AIRefactorResponse,
     BuildStarted,
-    GeminiBoardRequest,
-    GeminiBoardResponse,
-    GeminiRefactorRequest,
-    GeminiRefactorResponse,
     InferredLabel,
     RunConfig,
     ValidateResponse,
 )
+from shared.exceptions import AppException
+from shared.logger import logger
 
 load_dotenv()
 
@@ -46,7 +46,7 @@ templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
 if _STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
 
-_gemini = GeminiService(os.getenv("GEMINI_API_KEY", ""))
+_ai = AIService()
 
 
 # ---------------------------------------------------------------------------
@@ -235,45 +235,43 @@ async def stream_status(job_id: str) -> StreamingResponse:
 
 
 # ---------------------------------------------------------------------------
-# API -- Gemini AI
+# API -- AI
 # ---------------------------------------------------------------------------
 
 
-@app.post("/api/gemini/generate-board", response_model=GeminiBoardResponse)
-async def gemini_generate_board(req: GeminiBoardRequest) -> GeminiBoardResponse:
-    """Generate a board name and description using Gemini AI.
+@app.post("/api/ai/generate-board", response_model=AIBoardResponse)
+async def ai_generate_board(req: AIBoardRequest) -> AIBoardResponse:
+    """Generate a board name and description using the AI service.
 
     Args:
         req: Cards array and list names to base the generation on.
 
     Returns:
-        GeminiBoardResponse with board_name and board_description.
+        AIBoardResponse with board_name and board_description.
     """
     try:
-        result = _gemini.generate_board(req.cards, req.lists)
-        return GeminiBoardResponse(**result)
+        result = _ai.generate_board(req.cards, req.lists)
+        return AIBoardResponse(**result)
     except AppException as exc:
-        status = 503 if exc.args[0] == "GEMINI_API_KEY not configured" else 500
+        status = 503 if exc.args[0] == "AI service not configured" else 500
         raise HTTPException(status_code=status, detail=exc.args[0]) from exc
 
 
-@app.post("/api/gemini/refactor-description", response_model=GeminiRefactorResponse)
-async def gemini_refactor_description(
-    req: GeminiRefactorRequest,
-) -> GeminiRefactorResponse:
-    """Refactor a board description using Gemini AI.
+@app.post("/api/ai/refactor-description", response_model=AIRefactorResponse)
+async def ai_refactor_description(req: AIRefactorRequest) -> AIRefactorResponse:
+    """Refactor a board description using the AI service.
 
     Args:
         req: The description string to refactor.
 
     Returns:
-        GeminiRefactorResponse with the refactored description.
+        AIRefactorResponse with the refactored description.
     """
     try:
-        refactored = _gemini.refactor_description(req.description)
-        return GeminiRefactorResponse(refactored=refactored)
+        refactored = _ai.refactor_description(req.description)
+        return AIRefactorResponse(refactored=refactored)
     except AppException as exc:
-        status = 503 if exc.args[0] == "GEMINI_API_KEY not configured" else 500
+        status = 503 if exc.args[0] == "AI service not configured" else 500
         raise HTTPException(status_code=status, detail=exc.args[0]) from exc
 
 

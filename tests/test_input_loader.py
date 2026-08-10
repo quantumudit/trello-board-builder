@@ -10,8 +10,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from backend.utils.input_loader import _normalise, load_cards
 from shared.exceptions import AppException
-from utils.input_loader import _normalise, load_cards
 
 
 def _make_config(path: Path) -> MagicMock:

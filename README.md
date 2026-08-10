@@ -118,7 +118,7 @@ A browser-based wizard for building boards without touching the CLI.
 just serve
 
 # Terminal 2 -- Vite dev server (proxies /api to :8000)
-cd web/ui && npm run dev
+cd frontend && npm run dev
 ```
 
 Open http://localhost:5173. The UI proxies all `/api` calls to the FastAPI server.
@@ -126,7 +126,7 @@ Open http://localhost:5173. The UI proxies all `/api` calls to the FastAPI serve
 ### Production mode (single server)
 
 ```bash
-just build-ui   # compile React -> web/static/ and web/templates/
+just build-ui   # compile React -> backend/static/ and backend/templates/
 just serve      # serve everything from http://localhost:8000
 ```
 
@@ -189,5 +189,5 @@ just run-config config/my_other_board.yaml
 
 | File | Contents |
 |---|---|
-| [`docs/project-architecture.md`](docs/project-architecture.md) | Folder structure, data flow, design principles |
 | [`docs/settings-reference.md`](docs/settings-reference.md) | Full field reference + config examples |
+| [`docs/api.md`](docs/api.md) | REST API endpoint reference |
