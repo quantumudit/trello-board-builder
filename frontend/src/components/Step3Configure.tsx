@@ -232,7 +232,7 @@ export default function Step3Configure({
   const handleGenerateNewBoard = async () => {
     setIsGeneratingDetails(true);
     try {
-      const response = await fetch("/api/gemini/generate-board", {
+      const response = await fetch("/api/ai/generate-board", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cards, lists }),
@@ -242,11 +242,11 @@ export default function Step3Configure({
       if (data.board_name) {
         setBoardName(data.board_name);
         setBoardDescription(data.board_description || "");
-        showToast("Gemini suggested creative board details inspired by your dataset!", "success");
+        showToast("AI suggested creative board details inspired by your dataset!", "success");
       }
     } catch (err: any) {
       console.error(err);
-      showToast(err.message || "Failed to generate board metadata using Gemini AI.", "error");
+      showToast(err.message || "Failed to generate board metadata using AI.", "error");
     } finally {
       setIsGeneratingDetails(false);
     }
@@ -261,7 +261,7 @@ export default function Step3Configure({
 
     setIsRefactoringDesc(true);
     try {
-      const response = await fetch("/api/gemini/refactor-description", {
+      const response = await fetch("/api/ai/refactor-description", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description: boardDescription }),
@@ -270,11 +270,11 @@ export default function Step3Configure({
       const data = await response.json();
       if (data.refactored) {
         setBoardDescription(data.refactored);
-        showToast("Refactored board description using Gemini AI successfully!", "success");
+        showToast("Refactored board description using AI successfully!", "success");
       }
     } catch (err: any) {
       console.error(err);
-      showToast(err.message || "Failed to refactor board description using Gemini AI.", "error");
+      showToast(err.message || "Failed to refactor board description using AI.", "error");
     } finally {
       setIsRefactoringDesc(false);
     }

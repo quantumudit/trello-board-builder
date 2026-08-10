@@ -293,7 +293,7 @@ export default function App() {
 
       {/* Decorative footer */}
       <footer className="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400 font-medium">
-        <p>&copy; 2026 Trello Board Builder • Powered by React, Tailwind &amp; Gemini Flash.</p>
+        <p>&copy; 2026 Trello Board Builder • Powered by React, Tailwind &amp; AI Assistance.</p>
       </footer>
 
       {/* Floating Animated Custom Toasts Notification System */}

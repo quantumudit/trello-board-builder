@@ -302,7 +302,7 @@ export default function Step1Input({ onValidated, showToast }: Step1InputProps) 
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
               <span className="text-[10px] text-violet-700 font-bold bg-violet-50 px-2.5 py-1 rounded-full border border-violet-100 inline-flex items-center gap-1 w-max">
-                ⚡ Gemini Assistant
+                ⚡ AI Assistant
               </span>
 
               <div className="relative group w-full sm:w-auto">
