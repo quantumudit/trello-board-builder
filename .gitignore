@@ -39,3 +39,4 @@ frontend/dist/
 frontend/.vite/
 backend/static/
 backend/templates/index.html
+archive/
