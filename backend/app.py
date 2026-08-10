@@ -19,11 +19,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 
-from shared.exceptions import AppException
-from shared.logger import logger
-from web.gemini_service import GeminiService
-from web.pipeline_runner import get_job_queue, get_job_result, start_pipeline
-from web.schemas import (
+from backend.pipeline_runner import get_job_queue, get_job_result, start_pipeline
+from backend.schemas import (
     BuildStarted,
     GeminiBoardRequest,
     GeminiBoardResponse,
@@ -33,6 +30,9 @@ from web.schemas import (
     RunConfig,
     ValidateResponse,
 )
+from shared.exceptions import AppException
+from shared.logger import logger
+from web.gemini_service import GeminiService
 
 load_dotenv()
 

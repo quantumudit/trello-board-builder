@@ -19,7 +19,7 @@ from shared.logger import logger
 from utils.config_loader import Config
 
 if TYPE_CHECKING:
-    from web.schemas import RunConfig
+    from backend.schemas import RunConfig
 
 # ---------------------------------------------------------------------------
 # In-memory job registry.

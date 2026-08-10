@@ -1,5 +1,5 @@
 # Run `just build-ui` before building this image (no Node.js in image).
-# The built frontend must exist at web/static/assets/ and web/templates/index.html
+# The built frontend must exist at backend/static/assets/ and backend/templates/index.html
 # before running `docker compose up --build`.
 
 FROM python:3.12-slim
@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "web.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000"]
