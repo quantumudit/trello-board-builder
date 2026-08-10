@@ -152,27 +152,27 @@ class JobDoneEvent(BaseModel):
     message: str | None = None
 
 
-class GeminiBoardRequest(BaseModel):
+class AIBoardRequest(BaseModel):
     """Request body for POST /api/gemini/generate-board."""
 
     cards: list[dict[str, Any]]
     lists: list[str]
 
 
-class GeminiBoardResponse(BaseModel):
+class AIBoardResponse(BaseModel):
     """Response from POST /api/gemini/generate-board."""
 
     board_name: str
     board_description: str
 
 
-class GeminiRefactorRequest(BaseModel):
+class AIRefactorRequest(BaseModel):
     """Request body for POST /api/gemini/refactor-description."""
 
     description: str
 
 
-class GeminiRefactorResponse(BaseModel):
+class AIRefactorResponse(BaseModel):
     """Response from POST /api/gemini/refactor-description."""
 
     refactored: str

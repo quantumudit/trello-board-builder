@@ -1,7 +1,7 @@
 """
 Stub AI service for board name generation and description refactoring.
-This module will be replaced with a LangGraph + LiteLLM + Azure OpenAI
-implementation in a future session. All methods return placeholder responses.
+Will be replaced with a LangGraph + LiteLLM + Azure OpenAI implementation.
+All methods return placeholder responses without calling any external API.
 """
 
 from __future__ import annotations
@@ -9,18 +9,11 @@ from __future__ import annotations
 from shared.logger import logger
 
 
-class GeminiService:
+class AIService:
     """Stub AI service that returns placeholder responses without calling any API.
 
     The real implementation will use LangGraph + LiteLLM + Azure OpenAI.
-    Constructor accepts api_key to preserve the existing call signature in app.py.
-
-    Args:
-        api_key: Ignored -- no external API is called in this stub.
     """
-
-    def __init__(self, api_key: str) -> None:
-        pass
 
     def generate_board(self, cards: list[dict], lists: list[str]) -> dict[str, str]:
         """Return a placeholder board name and description.
