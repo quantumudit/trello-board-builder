@@ -1,5 +1,5 @@
-web/ui/node_modules/
-web/ui/.vite/
+frontend/node_modules/
+frontend/.vite/
 .git/
 .venv/
 .env
