@@ -15,8 +15,8 @@ import yaml
 from backend.services.board_manager import BoardManager
 from backend.services.card_builder import CardBuilder
 from backend.services.trello_client import TrelloClient
+from backend.utils.config_loader import Config
 from shared.logger import logger
-from utils.config_loader import Config
 
 if TYPE_CHECKING:
     from backend.schemas import RunConfig

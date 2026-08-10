@@ -12,7 +12,7 @@ from shared.exceptions import AppException
 from shared.logger import logger
 
 if TYPE_CHECKING:
-    from utils.config_loader import Config
+    from backend.utils.config_loader import Config
 
 
 def load_cards(config: Config) -> list[dict]:
