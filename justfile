@@ -45,5 +45,5 @@ serve:
 
 # Build the React frontend and wire output into FastAPI static/templates paths
 build-ui:
-    cd web/ui && npm install && npm run build
-    Move-Item -Force -Path "web/static/index.html" -Destination "web/templates/index.html"
+    cd frontend && npm install && npm run build
+    Move-Item -Force -Path "backend/static/index.html" -Destination "backend/templates/index.html"
