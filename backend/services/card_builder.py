@@ -11,8 +11,8 @@ from shared.exceptions import AppException
 from shared.logger import logger
 
 if TYPE_CHECKING:
-    from core.board_manager import BoardManager
-    from core.trello_client import TrelloClient
+    from backend.services.board_manager import BoardManager
+    from backend.services.trello_client import TrelloClient
 
 
 class CardBuilder:

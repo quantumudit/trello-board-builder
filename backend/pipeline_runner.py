@@ -12,9 +12,9 @@ from typing import TYPE_CHECKING, Any
 
 import yaml
 
-from core.board_manager import BoardManager
-from core.card_builder import CardBuilder
-from core.trello_client import TrelloClient
+from backend.services.board_manager import BoardManager
+from backend.services.card_builder import CardBuilder
+from backend.services.trello_client import TrelloClient
 from shared.logger import logger
 from utils.config_loader import Config
 

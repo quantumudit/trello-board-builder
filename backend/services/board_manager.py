@@ -11,7 +11,7 @@ from shared.exceptions import AppException
 from shared.logger import logger
 
 if TYPE_CHECKING:
-    from core.trello_client import TrelloClient
+    from backend.services.trello_client import TrelloClient
     from utils.config_loader import Config
 
 
